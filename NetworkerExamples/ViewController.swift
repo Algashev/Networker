@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import Networker
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        guard let url = URL(string: "https://yandex.ru/") else { return }
+        Networker.dataTask(with: url, String.self) { (result) in
+            print("Networker Completed")
+        }
     }
 
 
