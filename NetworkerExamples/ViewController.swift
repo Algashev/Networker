@@ -15,7 +15,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         guard let url = URL(string: "https://yandex.ru/") else { return }
-        Networker.dataTask(with: url, String.self) { (result) in
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let networker = Networker(decoder: decoder)
+        networker.dataTask(with: url, String.self) { (result) in
             print("Networker Completed")
         }
     }

@@ -37,7 +37,7 @@ class HTTPClient {
         self.session = session
     }
 
-    func getData(with request: URLRequest, completion: @escaping httpResult) {
+    func dataTask(with request: URLRequest, completion: @escaping httpResult) {
         let task = self.session.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))

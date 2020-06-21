@@ -13,29 +13,27 @@ let module = NSStringFromClass(Networker.self).components(separatedBy:".")[0]
 public typealias NetworkerResult<T: Decodable> = (Result<T, Error>) -> Void
 
 public final class Networker {
-    public static func dataTask<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NetworkerResult<T>) {
+    public var decoder = JSONDecoder()
+    
+    public init() { }
+    
+    public init(decoder: JSONDecoder) {
+        self.decoder = decoder
+    }
+    
+    public func dataTask<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NetworkerResult<T>) {
         let request = URLRequest(url: url)
-        Networker.dataTask(with: request, T.self) { (result) in
-            switch result {
-            case .success(let result):
-                completion(.success(result))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+        self.dataTask(with: request, T.self) { (result) in
+            completion(result)
         }
     }
     
-    public static func dataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NetworkerResult<T>) {
-        DispatchQueue(label: "algashev.Networker.dataTask", qos: .userInitiated).async {
-            Networker.dataTaskInQueue(with: request, T.self) { (result) in
-                switch result {
-                case .success(let result):
-                    DispatchQueue.main.async { completion(.success(result)) }
-                case .failure(let error):
-                    Networker.log(request, message: error.localizedDescription)
-                    DispatchQueue.main.async { completion(.failure(error)) }
-                }
+    public func dataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NetworkerResult<T>) {
+        self.dataTaskCore(with: request, T.self) { (result) in
+            if case .failure(let error) = result {
+                Networker.log(request, message: error.localizedDescription)
             }
+            DispatchQueue.main.async { completion(result) }
         }
     }
 }
@@ -43,21 +41,14 @@ public final class Networker {
 //MARK: - Private Methods
 
 extension Networker {
-    private static func dataTaskInQueue<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NetworkerResult<T>) {
-        HTTPClient(URLSession.shared).getData(with: request) { (result) in
+    private func dataTaskCore<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NetworkerResult<T>) {
+        HTTPClient(URLSession.shared).dataTask(with: request) { (result) in
             switch result {
             case .success(let result):
                 Networker.log(request, message: result.statusCode)
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let parser = JSONParser(decoder)
+                let parser = JSONParser(self.decoder)
                 let result = parser.decode(T.self, result.data)
-                switch result {
-                case .success(let data):
-                    completion(.success(data))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+                completion(result)
             case .failure(let error):
                 completion(.failure(error))
             }
