@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF085CAE249F668E005993A0 /* Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF085CAD249F668E005993A0 /* Decodable.swift */; };
 		FF4731BE246DCC6C0035D5FF /* Networker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF4731B4246DCC6C0035D5FF /* Networker.framework */; };
 		FF4731C3246DCC6C0035D5FF /* NetworkerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4731C2246DCC6C0035D5FF /* NetworkerTests.swift */; };
 		FF4731C5246DCC6C0035D5FF /* Networker.h in Headers */ = {isa = PBXBuildFile; fileRef = FF4731B7246DCC6C0035D5FF /* Networker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -19,7 +20,6 @@
 		FF4731E9246DE4B90035D5FF /* Networker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF4731B4246DCC6C0035D5FF /* Networker.framework */; };
 		FF90EF32247C621F0073330B /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90EF31247C621F0073330B /* HTTPClient.swift */; };
 		FF90EF34247C62FB0073330B /* HTTPURLResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90EF33247C62FB0073330B /* HTTPURLResponse.swift */; };
-		FF90EF36247C63650073330B /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF90EF35247C63650073330B /* JSONParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF085CAD249F668E005993A0 /* Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decodable.swift; sourceTree = "<group>"; };
 		FF4731B4246DCC6C0035D5FF /* Networker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Networker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF4731B7246DCC6C0035D5FF /* Networker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Networker.h; sourceTree = "<group>"; };
 		FF4731B8246DCC6C0035D5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,7 +50,6 @@
 		FF4731E6246DDD1D0035D5FF /* Networker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networker.swift; sourceTree = "<group>"; };
 		FF90EF31247C621F0073330B /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		FF90EF33247C62FB0073330B /* HTTPURLResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPURLResponse.swift; sourceTree = "<group>"; };
-		FF90EF35247C63650073330B /* JSONParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF085CAF249F6EE6005993A0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FF085CAD249F668E005993A0 /* Decodable.swift */,
+				FF90EF33247C62FB0073330B /* HTTPURLResponse.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		FF4731AA246DCC6C0035D5FF = {
 			isa = PBXGroup;
 			children = (
@@ -106,8 +115,8 @@
 				FF4731B7246DCC6C0035D5FF /* Networker.h */,
 				FF4731B8246DCC6C0035D5FF /* Info.plist */,
 				FF4731E6246DDD1D0035D5FF /* Networker.swift */,
-				FF90EF37247C63970073330B /* Services */,
-				FF90EF33247C62FB0073330B /* HTTPURLResponse.swift */,
+				FF90EF31247C621F0073330B /* HTTPClient.swift */,
+				FF085CAF249F6EE6005993A0 /* Extensions */,
 			);
 			path = Networker;
 			sourceTree = "<group>";
@@ -139,15 +148,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		FF90EF37247C63970073330B /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				FF90EF31247C621F0073330B /* HTTPClient.swift */,
-				FF90EF35247C63650073330B /* JSONParser.swift */,
-			);
-			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,7 +293,7 @@
 			files = (
 				FF90EF32247C621F0073330B /* HTTPClient.swift in Sources */,
 				FF4731E7246DDD1D0035D5FF /* Networker.swift in Sources */,
-				FF90EF36247C63650073330B /* JSONParser.swift in Sources */,
+				FF085CAE249F668E005993A0 /* Decodable.swift in Sources */,
 				FF90EF34247C62FB0073330B /* HTTPURLResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

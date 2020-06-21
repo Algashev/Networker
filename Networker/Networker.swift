@@ -46,9 +46,12 @@ extension Networker {
             switch result {
             case .success(let result):
                 Networker.log(request, message: result.statusCode)
-                let parser = JSONParser(self.decoder)
-                let result = parser.decode(T.self, result.data)
-                completion(result)
+                do {
+                    let result = try T(decoding: result.data, decoder: self.decoder)
+                    completion(.success(result))
+                } catch {
+                    completion(.failure(error))
+                }
             case .failure(let error):
                 completion(.failure(error))
             }
