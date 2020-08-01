@@ -16,17 +16,8 @@ public typealias ImageResult = Result<UIImage, Error>
 public typealias NWImageCompletion = (ImageResult) -> Void
 
 public final class Networker {
-    public enum Error: Swift.Error, LocalizedError {
+    public enum Error: Swift.Error {
         case invalidImageData
-        
-        public var errorDescription: String? {
-            switch self {
-            case .invalidImageData:
-                let key = "Не удалось создать изображение из полученных данных"
-                let comment = "Неверный формат данных изображения"
-                return NSLocalizedString(key, comment: comment)
-            }
-        }
     }
     
     public var decoder = JSONDecoder()
@@ -60,6 +51,17 @@ public final class Networker {
     public func fetchImage(with request: URLRequest, completion: @escaping NWImageCompletion) {
         self.dataTaskImageCore(with: request) { (result) in
             DispatchQueue.main.async { completion(result) }
+        }
+    }
+}
+
+extension Networker.Error: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidImageData:
+            let key = "Не удалось создать изображение из полученных данных"
+            let comment = "Неверный формат данных изображения"
+            return NSLocalizedString(key, comment: comment)
         }
     }
 }
