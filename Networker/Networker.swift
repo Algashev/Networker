@@ -10,6 +10,7 @@ import UIKit
 
 let module = NSStringFromClass(Networker.self).components(separatedBy:".")[0]
 
+public typealias DecodableResult = Result<Decodable, Error>
 public typealias NWJSONResult<T: Decodable> = (Result<T, Error>) -> Void
 public typealias ImageResult = Result<UIImage, Error>
 public typealias NWImageCompletion = (ImageResult) -> Void
