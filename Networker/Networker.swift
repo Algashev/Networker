@@ -20,12 +20,17 @@ public final class Networker {
         case invalidImageData
     }
     
+    private static var isVerboseEnabled = false
     public var decoder = JSONDecoder()
     
     public init() { }
     
     public init(decoder: JSONDecoder) {
         self.decoder = decoder
+    }
+    
+    public func verbose() {
+        Networker.isVerboseEnabled = true
     }
     
     public func dataTask<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
@@ -107,6 +112,7 @@ extension Networker {
     }
     
     private static func log(_ request: URLRequest, message: String) {
+        guard Networker.isVerboseEnabled else { return }
         let url = request.url?.absoluteString ?? "(пустое значение ulr)"
         print("\(module)\n\(url)\n\(message)")
     }
