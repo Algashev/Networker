@@ -49,7 +49,7 @@ public final class Networker {
     }
     
     public func fetchImage(with request: URLRequest, completion: @escaping NWImageCompletion) {
-        self.dataTaskImageCore(with: request) { (result) in
+        self.imageDataTask(with: request) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
     }
@@ -87,7 +87,7 @@ extension Networker {
         }
     }
     
-    private func dataTaskImageCore(with request: URLRequest, completion: @escaping NWImageCompletion) {
+    private func imageDataTask(with request: URLRequest, completion: @escaping NWImageCompletion) {
         HTTPClient(URLSession.shared).dataTask(with: request) { (result) in
             switch result {
             case .success(let result):
