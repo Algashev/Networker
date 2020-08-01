@@ -8,28 +8,14 @@
 
 import Foundation
 
-enum HTTPError: Error, LocalizedError, Equatable {
-    case emptyData
-    case unknownResponse
-    case wrongStatusCode(_ statusCode: String, error: String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .emptyData:
-            let key = "В ответе сервера отсутствуют данные"
-            return NSLocalizedString(key, comment: "Нет данных")
-        case .unknownResponse:
-            let key = "Ответ сервера не распознан"
-            return NSLocalizedString(key, comment: "Ответ не распознан")
-        case .wrongStatusCode(let statusCode, let error):
-            let key = "Неуспешный ответ состояния HTTP: \(statusCode). Ошибка: \(error)"
-            return NSLocalizedString(key, comment: statusCode)
-        }
-    }
-}
-
 class HTTPClient {
-    typealias httpResult = (Result<(data: Data, statusCode: String), Error>) -> Void
+    enum Error: Swift.Error {
+        case emptyData
+        case unknownResponse
+        case wrongStatusCode(_ statusCode: String, error: String)
+    }
+    
+    typealias httpResult = (Result<(data: Data, statusCode: String), Swift.Error>) -> Void
     
     let session: URLSession
     
@@ -45,13 +31,13 @@ class HTTPClient {
             }
             
             guard let data = data else {
-                let error = HTTPError.emptyData
+                let error = Error.emptyData
                 completion(.failure(error))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                let error = HTTPError.unknownResponse
+                let error = Error.unknownResponse
                 completion(.failure(error))
                 return
             }
@@ -61,11 +47,27 @@ class HTTPClient {
                 completion(.success(success))
             } else {
                 let message = String(decoding: data, as: UTF8.self)
-                let error = HTTPError.wrongStatusCode(httpResponse.localizedStatusCode, error: message)
+                let error = Error.wrongStatusCode(httpResponse.localizedStatusCode, error: message)
                 completion(.failure(error))
             }
         }
         
         task.resume()
+    }
+}
+
+extension HTTPClient.Error: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .emptyData:
+            let key = "В ответе сервера отсутствуют данные"
+            return NSLocalizedString(key, comment: "Нет данных")
+        case .unknownResponse:
+            let key = "Ответ сервера не распознан"
+            return NSLocalizedString(key, comment: "Ответ не распознан")
+        case .wrongStatusCode(let statusCode, let error):
+            let key = "Неуспешный ответ состояния HTTP: \(statusCode). Ошибка: \(error)"
+            return NSLocalizedString(key, comment: statusCode)
+        }
     }
 }
