@@ -15,7 +15,8 @@ class HTTPClient {
         case wrongStatusCode(_ statusCode: String, error: String)
     }
     
-    typealias httpResult = (Result<(data: Data, statusCode: String), Swift.Error>) -> Void
+    typealias Result = Swift.Result<(data: Data, statusCode: String), Swift.Error>
+    typealias httpResult = (Result) -> Void
     
     let session: URLSession
     
