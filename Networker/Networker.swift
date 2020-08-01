@@ -11,7 +11,7 @@ import UIKit
 let module = NSStringFromClass(Networker.self).components(separatedBy:".")[0]
 
 public typealias NWJSONResult<T: Decodable> = (Result<T, Error>) -> Void
-public typealias NWImageResult = (Result<UIImage, Error>) -> Void
+public typealias NWImageCompletion = (Result<UIImage, Error>) -> Void
 
 public final class Networker {
     public enum Error: Swift.Error, LocalizedError {
@@ -48,14 +48,14 @@ public final class Networker {
         }
     }
     
-    public func fetchImage(with url: URL, completion: @escaping NWImageResult) {
+    public func fetchImage(with url: URL, completion: @escaping NWImageCompletion) {
         let request = URLRequest(url: url)
         self.fetchImage(with: request) { (result) in
             completion(result)
         }
     }
     
-    public func fetchImage(with request: URLRequest, completion: @escaping NWImageResult) {
+    public func fetchImage(with request: URLRequest, completion: @escaping NWImageCompletion) {
         self.dataTaskImageCore(with: request) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
@@ -83,7 +83,7 @@ extension Networker {
         }
     }
     
-    private func dataTaskImageCore(with request: URLRequest, completion: @escaping NWImageResult) {
+    private func dataTaskImageCore(with request: URLRequest, completion: @escaping NWImageCompletion) {
         HTTPClient(URLSession.shared).dataTask(with: request) { (result) in
             switch result {
             case .success(let result):
