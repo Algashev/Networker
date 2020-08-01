@@ -16,7 +16,7 @@ class HTTPClient {
     }
     
     typealias Result = Swift.Result<(data: Data, statusCode: String), Swift.Error>
-    typealias httpResult = (Result) -> Void
+    typealias Completion = (Result) -> Void
     
     let session: URLSession
     
@@ -24,7 +24,7 @@ class HTTPClient {
         self.session = session
     }
 
-    func dataTask(with request: URLRequest, completion: @escaping httpResult) {
+    func dataTask(with request: URLRequest, completion: @escaping Completion) {
         let task = self.session.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
