@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let networker = Networker(decoder: decoder)
-        networker.dataTask(with: url, String.self) { (result) in
+        networker.requestJSON(with: url, String.self) { (result) in
             print("Networker Completed")
         }
     }

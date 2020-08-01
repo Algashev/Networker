@@ -33,14 +33,14 @@ public final class Networker {
         Networker.isVerboseEnabled = true
     }
     
-    public func dataTask<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
+    public func requestJSON<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
         let request = URLRequest(url: url)
-        self.dataTask(with: request, T.self) { (result) in
+        self.requestJSON(with: request, T.self) { (result) in
             completion(result)
         }
     }
     
-    public func dataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
+    public func requestJSON<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
         self.dataTaskJSONCore(with: request, T.self) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
