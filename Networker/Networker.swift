@@ -11,7 +11,8 @@ import UIKit
 let module = NSStringFromClass(Networker.self).components(separatedBy:".")[0]
 
 public typealias NWJSONResult<T: Decodable> = (Result<T, Error>) -> Void
-public typealias NWImageCompletion = (Result<UIImage, Error>) -> Void
+public typealias ImageResult = Result<UIImage, Error>
+public typealias NWImageCompletion = (ImageResult) -> Void
 
 public final class Networker {
     public enum Error: Swift.Error, LocalizedError {
