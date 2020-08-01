@@ -46,14 +46,14 @@ public final class Networker {
         }
     }
     
-    public func fetchImage(with url: URL, completion: @escaping NWImageCompletion) {
+    public func requestImage(with url: URL, completion: @escaping NWImageCompletion) {
         let request = URLRequest(url: url)
-        self.fetchImage(with: request) { (result) in
+        self.requestImage(with: request) { (result) in
             completion(result)
         }
     }
     
-    public func fetchImage(with request: URLRequest, completion: @escaping NWImageCompletion) {
+    public func requestImage(with request: URLRequest, completion: @escaping NWImageCompletion) {
         self.imageDataTask(with: request) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
