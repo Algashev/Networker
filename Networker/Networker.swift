@@ -11,7 +11,7 @@ import UIKit
 let module = NSStringFromClass(Networker.self).components(separatedBy:".")[0]
 
 public typealias DecodableResult = Result<Decodable, Error>
-public typealias NWJSONResult<T: Decodable> = (Result<T, Error>) -> Void
+public typealias NWDecodableCompetion = (DecodableResult) -> Void
 public typealias ImageResult = Result<UIImage, Error>
 public typealias NWImageCompletion = (ImageResult) -> Void
 
@@ -37,14 +37,14 @@ public final class Networker {
         self.decoder = decoder
     }
     
-    public func dataTask<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWJSONResult<T>) {
+    public func dataTask<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
         let request = URLRequest(url: url)
         self.dataTask(with: request, T.self) { (result) in
             completion(result)
         }
     }
     
-    public func dataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWJSONResult<T>) {
+    public func dataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
         self.dataTaskJSONCore(with: request, T.self) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
@@ -67,7 +67,7 @@ public final class Networker {
 //MARK: - Private Methods
 
 extension Networker {
-    private func dataTaskJSONCore<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWJSONResult<T>) {
+    private func dataTaskJSONCore<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
         HTTPClient(URLSession.shared).dataTask(with: request) { (result) in
             switch result {
             case .success(let result):
