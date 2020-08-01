@@ -10,8 +10,8 @@ import UIKit
 
 let module = NSStringFromClass(Networker.self).components(separatedBy:".")[0]
 
-public typealias DecodableResult = Result<Decodable, Error>
-public typealias NWDecodableCompetion = (DecodableResult) -> Void
+public typealias DecodableResult<T: Decodable> = Result<T, Error>
+public typealias NWDecodableCompetion<T: Decodable> = (DecodableResult<T>) -> Void
 public typealias ImageResult = Result<UIImage, Error>
 public typealias NWImageCompletion = (ImageResult) -> Void
 
@@ -33,14 +33,14 @@ public final class Networker {
         Networker.isVerboseEnabled = true
     }
     
-    public func requestJSON<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
+    public func requestJSON<T: Decodable>(with url: URL, _ type: T.Type, completion: @escaping NWDecodableCompetion<T>) {
         let request = URLRequest(url: url)
         self.requestJSON(with: request, T.self) { (result) in
             completion(result)
         }
     }
     
-    public func requestJSON<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
+    public func requestJSON<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion<T>) {
         self.jsonDataTask(with: request, T.self) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
@@ -74,7 +74,7 @@ extension Networker.Error: LocalizedError {
 //MARK: - Private Methods
 
 extension Networker {
-    private func jsonDataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
+    private func jsonDataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion<T>) {
         HTTPClient(URLSession.shared).dataTask(with: request) { (result) in
             switch result {
             case .success(let result):
