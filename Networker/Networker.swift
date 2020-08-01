@@ -41,7 +41,7 @@ public final class Networker {
     }
     
     public func requestJSON<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
-        self.dataTaskJSONCore(with: request, T.self) { (result) in
+        self.jsonDataTask(with: request, T.self) { (result) in
             DispatchQueue.main.async { completion(result) }
         }
     }
@@ -74,7 +74,7 @@ extension Networker.Error: LocalizedError {
 //MARK: - Private Methods
 
 extension Networker {
-    private func dataTaskJSONCore<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
+    private func jsonDataTask<T: Decodable>(with request: URLRequest, _ type: T.Type, completion: @escaping NWDecodableCompetion) {
         HTTPClient(URLSession.shared).dataTask(with: request) { (result) in
             switch result {
             case .success(let result):
