@@ -12,10 +12,10 @@ class HTTPClient {
     enum Error: Swift.Error {
         case emptyData
         case unknownResponse
-        case wrongStatusCode(_ statusCode: String, error: String)
+        case wrongStatusCode(_ httpData: HTTPData)
     }
     
-    typealias Result = Swift.Result<(data: Data, statusCode: String), Swift.Error>
+    typealias Result = Swift.Result<HTTPData, Swift.Error>
     typealias Completion = (Result) -> Void
     
     let session: URLSession
@@ -43,12 +43,11 @@ class HTTPClient {
                 return
             }
             
+            let httpData = HTTPData(data: data, response: httpResponse)
             if (200...299).contains(httpResponse.statusCode) {
-                let success = (data: data, statusCode: httpResponse.localizedStatusCode)
-                completion(.success(success))
+                completion(.success(httpData))
             } else {
-                let message = String(decoding: data, as: UTF8.self)
-                let error = Error.wrongStatusCode(httpResponse.localizedStatusCode, error: message)
+                let error = Error.wrongStatusCode(httpData)
                 completion(.failure(error))
             }
         }
@@ -66,7 +65,9 @@ extension HTTPClient.Error: LocalizedError {
         case .unknownResponse:
             let key = "Ответ сервера не распознан"
             return NSLocalizedString(key, comment: "Ответ не распознан")
-        case .wrongStatusCode(let statusCode, let error):
+        case .wrongStatusCode(let httpData):
+            let statusCode = httpData.response.localizedStatusCode
+            let error = httpData.data.utf8String
             let key = "Неуспешный ответ состояния HTTP: \(statusCode). Ошибка: \(error)"
             return NSLocalizedString(key, comment: statusCode)
         }
